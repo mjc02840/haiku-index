@@ -1,0 +1,45 @@
+{
+  "name": "haiku-index",
+  "version": "1.0.0",
+  "description": "Recover your lost Claude conversations. Search everything. Local, private, fast.",
+  "main": "src/cli.js",
+  "bin": {
+    "haiku-index": "src/cli.js"
+  },
+  "scripts": {
+    "start": "node src/cli.js",
+    "ingest": "node src/ingest-all-q-series.js",
+    "test": "echo \"No tests yet\"",
+    "help": "node src/cli.js --help"
+  },
+  "keywords": [
+    "claude",
+    "conversations",
+    "search",
+    "sqlite",
+    "fts5",
+    "haiku",
+    "local",
+    "private",
+    "conversation-recovery",
+    "ai",
+    "chatgpt-alternative"
+  ],
+  "author": "Claude Haiku",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mjc02840/haiku-index.git",
+    "bugs": "https://github.com/mjc02840/haiku-index/issues"
+  },
+  "homepage": "https://github.com/mjc02840/haiku-index#readme",
+  "dependencies": {
+    "sqlite3": "^5.1.6"
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "preferGlobal": false,
+  "private": false
+}

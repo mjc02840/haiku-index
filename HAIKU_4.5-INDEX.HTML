@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="haiku-index - Recover your lost Claude conversations. Search everything. Local, private, fast.">
+    <meta name="og:image" content="logo.jpg">
+    <meta name="og:title" content="haiku-index - Search Your Claude Conversations">
+    <meta name="og:description" content="Never lose a conversation again. Complete, searchable index of all your Claude chats.">
+    <title>haiku-index — Search Your Claude Conversations</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f0ff 0%, #e8f4f8 50%, #f0f8e8 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid #d4c5ff;
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-weight: bold;
+            font-size: 1.4rem;
+            color: #6b5ba6;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #d4c5ff 0%, #c5e4ff 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #6b5ba6;
+        }
+
+        nav a {
+            color: #666;
+            text-decoration: none;
+            margin-left: 2rem;
+            transition: color 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        nav a:hover {
+            color: #d4a5ff;
+        }
+
+        /* Hero Section */
+        .hero {
+            max-width: 1200px;
+            margin: 4rem auto 3rem;
+            padding: 0 2rem;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            color: #6b5ba6;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .hero .tagline {
+            font-size: 1.3rem;
+            color: #666;
+            margin-bottom: 2rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 3rem;
+        }
+
+        .btn {
+            padding: 1rem 2.5rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #d4c5ff 0%, #c5d4ff 100%);
+            color: #6b5ba6;
+            box-shadow: 0 4px 15px rgba(212, 197, 255, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(212, 197, 255, 0.6);
+        }
+
+        .btn-secondary {
+            background: rgba(197, 228, 255, 0.3);
+            color: #5a8fa8;
+            border: 2px solid #c5e4ff;
+        }
+
+        .btn-secondary:hover {
+            background: #c5e4ff;
+            color: #4a7fa8;
+        }
+
+        /* Problem/Solution Section */
+        .problem-solution {
+            background: white;
+            border-top: 3px solid #d4c5ff;
+            border-bottom: 3px solid #c5e4ff;
+            padding: 4rem 2rem;
+            margin: 3rem 0;
+        }
+
+        .ps-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+        }
+
+        .ps-section h3 {
+            color: #6b5ba6;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .ps-section p {
+            color: #666;
+            line-height: 1.8;
+        }
+
+        .ps-section ul {
+            list-style: none;
+            margin-top: 1rem;
+        }
+
+        .ps-section li {
+            padding: 0.5rem 0;
+            color: #666;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .ps-section li:before {
+            content: "✓";
+            color: #b8d4ff;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        .problem h3 {
+            color: #d4a8a8;
+        }
+
+        .solution h3 {
+            color: #a8d4b8;
+        }
+
+        @media (max-width: 768px) {
+            .ps-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Features Section */
+        .features {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        .features h2 {
+            text-align: center;
+            color: #6b5ba6;
+            font-size: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            border: 3px solid #d4c5ff;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(212, 197, 255, 0.2);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #d4c5ff 0%, #c5e4ff 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            color: #6b5ba6;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-card p {
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        /* Made by Claude Haiku Section */
+        .made-by {
+            background: linear-gradient(135deg, rgba(212, 197, 255, 0.1) 0%, rgba(197, 228, 255, 0.1) 100%);
+            padding: 3rem 2rem;
+            text-align: center;
+            margin: 3rem 0;
+            border-top: 2px dashed #d4c5ff;
+            border-bottom: 2px dashed #c5e4ff;
+        }
+
+        .made-by-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .made-by-badge {
+            display: inline-block;
+            background: white;
+            border: 2px solid #d4c5ff;
+            border-radius: 25px;
+            padding: 1rem 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .made-by-badge span {
+            color: #6b5ba6;
+            font-weight: 600;
+        }
+
+        .made-by h3 {
+            color: #6b5ba6;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .made-by p {
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        /* Installation Section */
+        .installation {
+            background: white;
+            padding: 3rem 2rem;
+            margin: 3rem 0;
+        }
+
+        .installation-content {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .installation h2 {
+            color: #6b5ba6;
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 1.8rem;
+        }
+
+        .code-block {
+            background: #f5f0ff;
+            border-left: 4px solid #d4c5ff;
+            padding: 1.5rem;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            margin-bottom: 1rem;
+            color: #6b5ba6;
+        }
+
+        .installation-step {
+            margin-bottom: 2rem;
+        }
+
+        .installation-step h4 {
+            color: #6b5ba6;
+            margin-bottom: 0.5rem;
+        }
+
+        .installation-step p {
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Footer */
+        footer {
+            background: #f5f0ff;
+            border-top: 3px solid #d4c5ff;
+            padding: 3rem 2rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h4 {
+            color: #6b5ba6;
+            margin-bottom: 1rem;
+        }
+
+        .footer-section a {
+            display: block;
+            color: #666;
+            text-decoration: none;
+            margin-bottom: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: #d4c5ff;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 2px solid #d4c5ff;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .footer-bottom p {
+            margin-bottom: 0.5rem;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background: #d4c5ff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6b5ba6;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background: #c5e4ff;
+            color: #5a8fa8;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .hero .tagline {
+                font-size: 1rem;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            nav {
+                display: flex;
+                gap: 1rem;
+            }
+
+            nav a {
+                margin-left: 0;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <a href="#" class="logo">
+                <div class="logo-icon">◇</div>
+                haiku-index
+            </a>
+            <nav>
+                <a href="#features">Features</a>
+                <a href="#installation">Install</a>
+                <a href="https://github.com/yourusername/haiku-index" target="_blank">GitHub</a>
+                <a href="https://github.com/yourusername/haiku-index/blob/main/README.md" target="_blank">Docs</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+        <h1>Never Lose a Conversation Again</h1>
+        <p class="tagline">Search your complete Claude conversation history. Local. Private. Fast.</p>
+        <div class="hero-buttons">
+            <a href="https://github.com/yourusername/haiku-index" class="btn btn-primary">View on GitHub</a>
+            <a href="#installation" class="btn btn-secondary">Get Started</a>
+        </div>
+    </section>
+
+    <!-- Problem/Solution -->
+    <section class="problem-solution">
+        <div class="ps-content">
+            <div class="ps-section problem">
+                <h3>The Problem</h3>
+                <p>You're having amazing conversations with Claude, but the context gets lost between sessions.</p>
+                <ul>
+                    <li>Can't find that brilliant idea from last month</li>
+                    <li>Recreate the same solutions twice</li>
+                    <li>Vendor lock-in with cloud storage</li>
+                    <li>Privacy concerns with centralized services</li>
+                </ul>
+            </div>
+            <div class="ps-section solution">
+                <h3>The Solution</h3>
+                <p>haiku-index gives you a complete, searchable archive of every Claude conversation.</p>
+                <ul>
+                    <li>Index conversations from day one</li>
+                    <li>Full-text search in milliseconds</li>
+                    <li>100% local, completely private</li>
+                    <li>Zero vendor lock-in, MIT licensed</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features" id="features">
+        <h2>Why haiku-index?</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">📚</div>
+                <h3>Complete History</h3>
+                <p>Every conversation from day one, indexed and searchable. Nothing gets lost.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>Lightning Fast</h3>
+                <p>Search across 5,000+ messages in milliseconds with FTS5 full-text indexing.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔐</div>
+                <h3>100% Private</h3>
+                <p>All data stored locally. No cloud, no tracking, no vendor lock-in.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔄</div>
+                <h3>Auto-Sync</h3>
+                <p>New conversations automatically indexed every 5 minutes. Manual sync anytime.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💻</div>
+                <h3>Works Everywhere</h3>
+                <p>Mac, Linux, Windows. Node.js + SQLite. Simple, no dependencies.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📖</div>
+                <h3>Open Source</h3>
+                <p>MIT licensed. Built by Claude Haiku. Modify, fork, contribute freely.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Made by Claude Haiku -->
+    <section class="made-by">
+        <div class="made-by-content">
+            <div class="made-by-badge">
+                <span>✨ Made by Claude Haiku ✨</span>
+            </div>
+            <h3>Built with AI, Designed for Humans</h3>
+            <p>haiku-index was created using Claude Haiku as the development tool, with human guidance on architecture and design. It's a demonstration of AI-assisted open-source development.</p>
+        </div>
+    </section>
+
+    <!-- Installation -->
+    <section class="installation" id="installation">
+        <div class="installation-content">
+            <h2>Get Started in 3 Steps</h2>
+            
+            <div class="installation-step">
+                <h4>1. Install Node.js (if you don't have it)</h4>
+                <p>Download from <a href="https://nodejs.org" target="_blank">nodejs.org</a></p>
+            </div>
+
+            <div class="installation-step">
+                <h4>2. Clone and Install</h4>
+                <div class="code-block">
+git clone https://github.com/yourusername/haiku-index.git<br>
+cd haiku-index<br>
+npm install
+                </div>
+            </div>
+
+            <div class="installation-step">
+                <h4>3. Export and Index Your Conversations</h4>
+                <p>Export your Claude conversations from Settings → Privacy → Export Conversations, then:</p>
+                <div class="code-block">
+node src/ingest-all-q-series.js
+                </div>
+                <p>Then search:</p>
+                <div class="code-block">
+node src/cli.js search "your-query"
+                </div>
+            </div>
+
+            <p style="text-align: center; color: #6b5ba6; margin-top: 2rem;">
+                <strong>Full documentation:</strong> <a href="https://github.com/yourusername/haiku-index#readme" target="_blank" style="color: #d4c5ff;">README.md on GitHub</a>
+            </p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Project</h4>
+                <a href="https://github.com/yourusername/haiku-index" target="_blank">GitHub Repository</a>
+                <a href="https://github.com/yourusername/haiku-index/blob/main/README.md" target="_blank">Documentation</a>
+                <a href="https://github.com/yourusername/haiku-index/blob/main/LICENSE" target="_blank">MIT License</a>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <a href="https://github.com/yourusername/haiku-index/blob/main/docs/INSTALLATION.md" target="_blank">Installation Guide</a>
+                <a href="https://github.com/yourusername/haiku-index/blob/main/docs/ARCHITECTURE.md" target="_blank">Architecture</a>
+                <a href="https://github.com/yourusername/haiku-index/blob/main/CONTRIBUTING.md" target="_blank">Contributing</a>
+            </div>
+            <div class="footer-section">
+                <h4>About</h4>
+                <a href="https://www.anthropic.com" target="_blank">Claude (by Anthropic)</a>
+                <a href="https://www.anthropic.com/haiku" target="_blank">Claude Haiku</a>
+                <a href="mailto:hello@haiku-index.local">Contact</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p><strong>haiku-index</strong> — Recover your lost Claude conversations</p>
+            <p>Made with ✨ by Claude Haiku | MIT License © 2026</p>
+            <div class="social-links">
+                <a href="https://github.com/yourusername/haiku-index" title="GitHub">⚙</a>
+                <a href="https://x.com" title="X (Twitter)">𝕏</a>
+                <a href="mailto:hello@haiku-index.local" title="Email">✉</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
