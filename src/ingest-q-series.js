@@ -16,39 +16,30 @@ const db = new sqlite3.Database(dbPath);
 let totalConversations = 0;
 let totalMessages = 0;
 
-// Find JSONL file for a project
-function findProjectFile(project) {
+// Find ALL JSONL files for a project
+function findProjectFiles(project) {
   const projectDir = path.join(baseProjectDir, `-var-www-html-${project}`);
   if (!fs.existsSync(projectDir)) {
     console.error(`✗ Directory not found: ${projectDir}`);
-    return null;
+    return [];
   }
 
   const files = fs.readdirSync(projectDir)
     .filter(f => f.endsWith('.jsonl') && f !== 'sessions-index.json')
-    .sort((a, b) => fs.statSync(path.join(projectDir, b)).size -
-                    fs.statSync(path.join(projectDir, a)).size);
+    .sort();  // Sort alphabetically for consistent order
 
   if (files.length === 0) {
     console.error(`✗ No JSONL files found in ${projectDir}`);
-    return null;
+    return [];
   }
 
-  return path.join(projectDir, files[0]);
+  return files.map(f => path.join(projectDir, f));
 }
 
-// Parse JSONL file
-function ingestProject(project) {
+// Parse single JSONL file
+function ingestProjectFile(filePath, project) {
   return new Promise((resolve) => {
-    const filePath = findProjectFile(project);
-    if (!filePath) {
-      resolve();
-      return;
-    }
-
-    console.log(`\n✓ Processing ${project}`);
-    console.log(`  File: ${path.basename(filePath)}`);
-    console.log(`  Size: ${(fs.statSync(filePath).size / 1024 / 1024).toFixed(1)}M`);
+    console.log(`  • ${path.basename(filePath)} (${(fs.statSync(filePath).size / 1024 / 1024).toFixed(1)}M)`);
 
     const fileStream = fs.createReadStream(filePath);
     const rl = readline.createInterface({
@@ -198,6 +189,25 @@ function ingestProject(project) {
       console.error(`✗ Error reading file: ${err.message}`);
       resolve();
     });
+  });
+}
+
+// Process all files for a project
+function ingestProject(project) {
+  return new Promise(async (resolve) => {
+    const files = findProjectFiles(project);
+    if (files.length === 0) {
+      resolve();
+      return;
+    }
+
+    console.log(`\n✓ Processing ${project} (${files.length} file(s))`);
+
+    for (const filePath of files) {
+      await ingestProjectFile(filePath, project);
+    }
+
+    resolve();
   });
 }
 
