@@ -5,7 +5,7 @@
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 LOG_FILE="$SCRIPT_DIR/cron.log"
 INGEST_SCRIPT="$SCRIPT_DIR/src/ingest-q-series.js"
-PROJECTS="Q10 Q11 Q12 Q19"
+PROJECTS="Q10 Q11 Q12 Q19 VOICE-INTERFACE-CLAUDE-002"
 LAST_RUN_FILE="/tmp/haiku-last-run"
 
 # Get last run timestamp (default: 24 hours ago)
